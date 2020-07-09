@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from './login/login.component';
+import { PrestoService } from './services/presto.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'presto-demo';
+  constructor(public dialog: MatDialog, public ps: PrestoService) {}
+
+  openDialog(isLogin: boolean) {
+    return this.dialog.open(LoginComponent, { data: isLogin });
+  }
 }

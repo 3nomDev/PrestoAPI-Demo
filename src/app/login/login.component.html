@@ -1,0 +1,31 @@
+<h2>Sign {{isLogin?'In':'Up'}}</h2>
+<p class="mb-4">Sign {{isLogin?'in':'up'}} to access protected endpoints (Post/Put/Delete)</p>
+<form #signForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput name="emailField" [(ngModel)]="model.email" #emailModel="ngModel" required email>
+            <mat-error *ngIf="emailModel.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="emailModel.hasError('email') ">Not a valid email</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput name="passwordField" [(ngModel)]="model.password" #pswdModel="ngModel"
+                [type]="hide ? 'password' : 'text'" required>
+            <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="pswdModel.invalid">Password is required</mat-error>
+        </mat-form-field>
+        <mat-error>{{errorMsg}}</mat-error>
+
+        <div class="flex-center" *ngIf="loading">
+            <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <div class="modal-footer" *ngIf="!loading">
+            <button mat-raised-button type="button" (click)="dialogRef.close()">Cancel</button>
+            <button mat-raised-button type="submit" color="primary" [disabled]="signForm.invalid"
+                class="ml-3">Submit</button>
+        </div>
+    </div>
+</form>

@@ -26,15 +26,29 @@ mat-toolbar.mat-toolbar {
   box-shadow: 6px 0 6px rgba(0, 0, 0, 0.1);
   min-width: 200px;
 }
-
+mat-sidenav-content {
+  padding: 2rem 3rem;
+  background: #f7f7f7;
+}
 #app-container {
   height: 100%;
   margin-top: 64px;
+}
+#logo {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+}
+.active-link {
+  background: rgba(255, 255, 255, 0.1);
 }
 #search-container {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-right: 16px;
 }
 #search-container input {
   font-size: 16px;
@@ -48,6 +62,10 @@ mat-toolbar.mat-toolbar {
   max-width: 240px;
   height: 50%;
   -webkit-appearance: none;
+}
+#account {
+  width: fit-content;
+  margin-right: 1rem;
 }
 @media (min-width: 1000px) {
   #search-container input {

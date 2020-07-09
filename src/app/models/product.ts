@@ -7,4 +7,7 @@ export class Product {
   IsDiscontinued: boolean;
   DateAdded: string;
   LastUpdated: string;
+  Quantity: number;  
+  CompanyName?: string;
+  edit = false;
 }

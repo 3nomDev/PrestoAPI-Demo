@@ -1,8 +1,4 @@
-.form-container {
+.container {
   max-width: 600px;
   margin: 4rem auto;
-}
-
-mat-form-field {
-  width: 100%;
 }
