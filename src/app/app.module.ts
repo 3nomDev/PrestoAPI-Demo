@@ -9,6 +9,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { InventoryComponent } from './inventory/inventory.component';
+import { UsersComponent } from './users/users.component';
+import { OrdersComponent } from './orders/orders.component';
+import { ShipmentComponent } from './shipment/shipment.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { CustomersComponent } from './customers/customers.component';
+import { SetttingsComponent } from './setttings/setttings.component';
+import { InvoicesComponent } from './invoices/invoices.component';
 
 // Material Modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,21 +28,27 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { UsersComponent } from './users/users.component';
-import { OrdersComponent } from './orders/orders.component';
-import { ShipmentComponent } from './shipment/shipment.component';
-import { VendorsComponent } from './vendors/vendors.component';
-import { CustomersComponent } from './customers/customers.component';
-import { SetttingsComponent } from './setttings/setttings.component';
-import { InvoicesComponent } from './invoices/invoices.component';
-
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, HomeComponent, LoginComponent, InventoryComponent, UsersComponent, OrdersComponent, ShipmentComponent, VendorsComponent, CustomersComponent, SetttingsComponent, InvoicesComponent],
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    HomeComponent,
+    LoginComponent,
+    InventoryComponent,
+    UsersComponent,
+    OrdersComponent,
+    ShipmentComponent,
+    SuppliersComponent,
+    CustomersComponent,
+    SetttingsComponent,
+    InvoicesComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -56,7 +69,8 @@ import { InvoicesComponent } from './invoices/invoices.component';
     MatSortModule,
     MatPaginatorModule,
     MatTableModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent],

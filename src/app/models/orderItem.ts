@@ -4,4 +4,8 @@ export class OrderItem {
   ProductId: number;
   UnitPrice: number;
   Quantity: number;
+  edit=false;
+  constructor() {
+    this.edit = true;
+  }
 }

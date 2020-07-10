@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button aria-label="Menu icon" (click)="sidenav.toggle()">
+  <button id="menu-button" mat-icon-button aria-label="Menu icon" (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
   <a id="logo" routerLink="home">
@@ -9,9 +9,14 @@
   <div>
     <button mat-button routerLink="dashboard" routerLinkActive="active-link">Dashboard</button>
   </div>
-  <div id="search-container">
-    <input matInput placeholder="Search...">
-  </div>
+  <form id="search-container">
+    <input type="text" placeholder="Search..." aria-label="Search" [formControl]="myControl" [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="goToPage($event)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" [disabled]="option=='No results'">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </form>
   <div>
     <ng-container *ngIf="(ps.user | async) as user; else notSignedIn">
       <button id="account" mat-icon-button aria-label="Profile" [matMenuTriggerFor]="profile">
@@ -38,14 +43,12 @@
 </mat-toolbar>
 
 <mat-sidenav-container id="app-container">
-  <mat-sidenav id="side-nav" #sidenav mode="side" opened fixedInViewport fixedTopGap="64">
+  <mat-sidenav id="side-nav" #sidenav [mode]="isMobile?'over':'side'" [opened]="!isMobile" fixedInViewport
+    fixedTopGap="64">
     <mat-nav-list>
-      <a mat-list-item routerLink="orders" routerLinkActive="active-link">Orders </a>
-      <a mat-list-item routerLink="invoices" routerLinkActive="active-link">Invoices </a>
-      <a mat-list-item routerLink="shipment" routerLinkActive="active-link">Shipment </a>
-      <a mat-list-item routerLink="inventory" routerLinkActive="active-link">Inventory </a>
-      <a mat-list-item routerLink="vendors" routerLinkActive="active-link">Vendors </a>
-      <a mat-list-item routerLink="customers" routerLinkActive="active-link">Customers </a>
+      <a *ngFor="let p of pages" mat-list-item [routerLink]="p" routerLinkActive="active-link">{{p}} </a>
+      <!-- <a mat-list-item routerLink="invoices" routerLinkActive="active-link">Invoices </a> -->
+      <!-- <a mat-list-item routerLink="shipment" routerLinkActive="active-link">Shipment </a> -->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

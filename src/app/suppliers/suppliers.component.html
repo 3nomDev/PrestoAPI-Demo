@@ -1,8 +1,8 @@
 <div class="container">
     <div class="header-container">
-        <h1>Inventory</h1>
+        <h1>Suppliers</h1>
         <mat-form-field>
-            <mat-label>Search Products</mat-label>
+            <mat-label>Search Suppliers</mat-label>
             <input matInput (keyup)="applyFilter($event)" placeholder="By any key..." #input>
         </mat-form-field>
         <button mat-raised-button (click)="addRow()"> Add New </button>
@@ -13,62 +13,93 @@
     <div class="mat-elevation-z4" [hidden]="loading">
         <form #inputValidator="ngForm">
             <table mat-table [dataSource]="dataSource" matSort>
-
                 <ng-container matColumnDef="Id">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
                     <td mat-cell *matCellDef="let row">{{row.Id}}</td>
                 </ng-container>
-                <ng-container matColumnDef="ProductName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ProductName </th>
-                    <td mat-cell *matCellDef="let row">
-                        <ng-container *ngIf="!row.edit">
-                            {{row.ProductName}}
-                        </ng-container>
-                        <mat-form-field *ngIf="row.edit" appearance="fill">
-                            <input matInput placeholder="ProductName" [(ngModel)]="row.ProductName"
-                                [name]="'ProductName'+i" required>
-                        </mat-form-field>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="Quantity">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
-                    <td mat-cell *matCellDef="let row">
-                        <ng-container *ngIf="!row.edit">
-                            {{row.Quantity}}
-                        </ng-container>
-                        <mat-form-field *ngIf="row.edit" appearance="fill">
-                            <input matInput placeholder="Quantity" [(ngModel)]="row.Quantity" type="number"
-                                [name]="'Quantity'+i" required>
-                        </mat-form-field>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="UnitPrice">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> UnitPrice </th>
-                    <td mat-cell *matCellDef="let row">
-                        <ng-container *ngIf="!row.edit">
-                            {{row.UnitPrice}}
-                        </ng-container>
-                        <mat-form-field *ngIf="row.edit" appearance="fill">
-                            <input matInput placeholder="UnitPrice" [(ngModel)]="row.UnitPrice" type="number"
-                                [name]="'UnitPrice'+i" required>
-                        </mat-form-field>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="SupplierId">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> SupplierId </th>
-                    <td mat-cell *matCellDef="let row">
-                        <ng-container *ngIf="!row.edit">
-                            {{row.SupplierId}}
-                        </ng-container>
-                        <mat-form-field *ngIf="row.edit" appearance="fill">
-                            <input matInput placeholder="SupplierId" [(ngModel)]="row.SupplierId" type="number"
-                                [name]="'SupplierId'+i" required>
-                        </mat-form-field>
-                    </td>
-                </ng-container>
                 <ng-container matColumnDef="CompanyName">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> CompanyName </th>
-                    <td mat-cell *matCellDef="let row">{{row.CompanyName}}</td>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.CompanyName}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="CompanyName" [(ngModel)]="row.CompanyName"
+                                [name]="'CompanyName'+i" required>
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ContactName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ContactName </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.ContactName}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="ContactName" [(ngModel)]="row.ContactName"
+                                [name]="'ContactName'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ContactTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ContactTitle </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.ContactTitle}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="ContactTitle" [(ngModel)]="row.ContactTitle"
+                                [name]="'ContactTitle'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="City">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.City}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="City" [(ngModel)]="row.City"
+                                [name]="'City'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Country">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.Country}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="Country" [(ngModel)]="row.Country"
+                                [name]="'Country'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Phone">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.Phone}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="Phone" [(ngModel)]="row.Phone"
+                                [name]="'Phone'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Fax">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Fax </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.Fax}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="Fax" [(ngModel)]="row.Fax"
+                                [name]="'Fax'+i">
+                        </mat-form-field>
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="Buttons">
                     <th mat-header-cell *matHeaderCellDef></th>
@@ -102,11 +133,11 @@
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class]="row.edit?'edit-row':''"></tr>
 
                 <!-- Row shown when there is no matching data. -->
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell" colspan="4">No products matching the filter "{{input.value}}"</td>
+                    <td class="mat-cell" colspan="4">No suppliers matching the filter "{{input.value}}"</td>
                 </tr>
             </table>
         </form>

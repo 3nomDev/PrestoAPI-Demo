@@ -7,4 +7,5 @@ export class Supplier {
   Country: string;
   Phone: string;
   Fax: string;
+  edit = false;
 }

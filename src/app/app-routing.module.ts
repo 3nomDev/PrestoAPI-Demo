@@ -6,9 +6,9 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { OrdersComponent } from './orders/orders.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ShipmentComponent } from './shipment/shipment.component';
-import { VendorsComponent } from './vendors/vendors.component';
 import { CustomersComponent } from './customers/customers.component';
 import { SetttingsComponent } from './setttings/setttings.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
 
 const routes: Routes = [
   {
@@ -44,8 +44,8 @@ const routes: Routes = [
     component: InventoryComponent,
   },
   {
-    path: 'vendors',
-    component: VendorsComponent,
+    path: 'suppliers',
+    component: SuppliersComponent,
   },
   {
     path: 'customers',

@@ -44,6 +44,9 @@ mat-sidenav-content {
 .active-link {
   background: rgba(255, 255, 255, 0.1);
 }
+mat-nav-list a {
+  text-transform: capitalize;
+}
 #search-container {
   width: 100%;
   display: flex;
@@ -54,7 +57,7 @@ mat-sidenav-content {
   font-size: 16px;
   color: #444;
   border: none;
-  border-radius: 100px;
+  border-radius: 20px;
   background-color: #fff;
   padding: 7px 16px;
   margin-left: 8px;
@@ -62,17 +65,34 @@ mat-sidenav-content {
   max-width: 240px;
   height: 50%;
   -webkit-appearance: none;
+  transition: border-radius 0.1s ease-in-out;
+}
+#search-container input:focus{
+  border-radius: 15px 15px 0 0;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+#menu-button {
+  display: block !important;
 }
 #account {
   width: fit-content;
   margin-right: 1rem;
 }
 @media (min-width: 1000px) {
-  #search-container input {
+  /* #search-container input {
     transition: width 0.4s ease-in-out;
   }
   #search-container input:focus {
     width: 80%;
     outline: none;
+  } */
+}
+@media (max-width: 700px) {
+  .mat-toolbar > * {
+    display: none;
+  }
+  #search-container {
+    display: none;
   }
 }

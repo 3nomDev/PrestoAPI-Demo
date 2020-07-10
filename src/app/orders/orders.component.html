@@ -11,74 +11,100 @@
         <mat-spinner></mat-spinner>
     </div>
     <div class="mat-elevation-z4" [hidden]="loading">
-        <table mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="Id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-                <td mat-cell *matCellDef="let row">{{row.Id}}</td>
-            </ng-container>
-            <ng-container matColumnDef="CustomerId">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> CustomerId </th>
-                <td mat-cell *matCellDef="let row">
-                    <ng-container *ngIf="!row.edit">
-                        {{row.CustomerId}}
-                    </ng-container>
-                    <ng-container *ngIf="row.edit">
-                        <input matInput [(ngModel)]="row.CustomerId" text="number" name="customerId">
-                    </ng-container>
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="OrderNumber">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderNumber </th>
-                <td mat-cell *matCellDef="let row" class="small-col">
-                    <ng-container *ngIf="!row.edit">
-                        {{row.OrderNumber}}
-                    </ng-container>
-                    <ng-container *ngIf="row.edit">
-                        <input matInput [(ngModel)]="row.OrderNumber" name="OrderNumber">
-                    </ng-container>
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="OrderDate">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderDate </th>
-                <td mat-cell *matCellDef="let row" class="small-col">
-                    <span *ngIf="!row.edit">{{row.OrderDate}}</span>
-                    <input *ngIf="row.edit" matInput [(ngModel)]="row.OrderDate" name="OrderDate">
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="TotalAmount">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> TotalAmount </th>
-                <td mat-cell *matCellDef="let row" class="small-col">
-                    <ng-container *ngIf="!row.edit">
-                        {{row.TotalAmount}}
-                    </ng-container>
-                    <ng-container *ngIf="row.edit">
-                        <input matInput [(ngModel)]="row.TotalAmount" type="number" name="TotalAmount">
-                    </ng-container>
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="Buttons">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let row" class="btn-container">
-                    <mat-icon class="edit-btn" *ngIf="!row.edit" aria-hidden="false" aria-label="Edit"
-                        (click)="row.edit=true">edit
-                    </mat-icon>
-                    <ng-container *ngIf="row.edit">
-                        <button mat-raised-button color="warn" (click)="delete(row)"> Delete</button>
-                        <button mat-raised-button (click)="cancel(row)"> Cancel </button>
-                        <button mat-raised-button color="primary" (click)="save(row)"> Save </button>
-                    </ng-container>
-                </td>
-            </ng-container>
+        <form #inputValidator="ngForm">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                    <td mat-cell *matCellDef="let row">{{row.Id}}</td>
+                </ng-container>
+                <ng-container matColumnDef="CustomerId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> CustomerId </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.CustomerId}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="CustomerId" [(ngModel)]="row.CustomerId" type="number"
+                                [name]="'CustomerId'+i" required>
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="OrderNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderNumber </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.OrderNumber}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="OrderNumber" [(ngModel)]="row.OrderNumber"
+                                [name]="'OrderNumber'+i" required>
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="OrderDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> OrderDate </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.OrderDate}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="OrderDate" [(ngModel)]="row.OrderDate" [name]="'OrderDate'+i"
+                                required>
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="TotalAmount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> TotalAmount </th>
+                    <td mat-cell *matCellDef="let row; index as i">
+                        <ng-container *ngIf="!row.edit">
+                            {{row.TotalAmount}}
+                        </ng-container>
+                        <mat-form-field *ngIf="row.edit" appearance="fill">
+                            <input matInput placeholder="TotalAmount" [(ngModel)]="row.TotalAmount" type="number"
+                                [name]="'TotalAmount'+i">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Buttons">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row" class="btn-container">
+                         <button mat-icon-button [matMenuTriggerFor]="editMenu" aria-label="Edit menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #editMenu="matMenu" xPosition="before">
+                            <ng-container *ngIf="!row.edit">
+                                <button mat-menu-item (click)="row.edit=true">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item (click)="delete(row)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="row.edit">
+                                <button mat-menu-item [disabled]="inputValidator.invalid" (click)="save(row)">
+                                    <mat-icon>save</mat-icon>
+                                    <span>Save</span>
+                                </button>
+                                <button mat-menu-item (click)="cancel(row)">
+                                    <mat-icon>cancel</mat-icon>
+                                    <span>Cancel</span>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </td>
+                </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class]="row.edit?'edit-row':''"></tr>
 
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No products matching the filter "{{input.value}}"</td>
-            </tr>
-        </table>
-
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No orders matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+        </form>
         <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
     </div>
 </div>

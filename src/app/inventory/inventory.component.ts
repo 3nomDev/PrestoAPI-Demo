@@ -14,7 +14,7 @@ export class InventoryComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   dataSource: MatTableDataSource<Product>;
   products: Product[];
-  model = new Product();
+  loading = true;
   displayedColumns: string[] = [
     'Id',
     'ProductName',
@@ -36,6 +36,7 @@ export class InventoryComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.products);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.loading = false;
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -43,16 +44,21 @@ export class InventoryComponent implements OnInit {
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
   addRow() {
-    this.products.unshift(this.model);
+    this.dataSource.filter = '';
+    this.dataSource.paginator.firstPage();
+    //this.dataSource.data isn't directly mutable
+    const arr = this.dataSource.data;
+    arr.unshift(new Product());
+    this.dataSource.data = arr;
   }
-  create() {
-    return this.ps.createProduct(this.model);
+  async save(p: Product) {
+    p.edit = false;
+    if (p.Id) await this.ps.updateProduct(p);
+    else await this.ps.createProduct(p);
+    this.ngOnInit();
   }
-  update(p: Product) {
-    return this.ps.updateProduct(p);
-  }
-  delete(p: Product, i: number) {
-    this.products.splice(i, 1);
+  delete(p: Product) {
+    this.dataSource.data = this.dataSource.data.filter((d) => d.Id != p.Id);
     return this.ps.deleteProduct(p);
   }
   cancel(p: Product) {

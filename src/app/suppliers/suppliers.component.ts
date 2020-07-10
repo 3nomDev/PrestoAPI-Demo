@@ -1,38 +1,40 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Customer } from '../models/customer';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Supplier } from '../models/supplier';
 import { PrestoService } from '../services/presto.service';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.css']
+  selector: 'app-suppliers',
+  templateUrl: './suppliers.component.html',
+  styleUrls: ['./suppliers.component.css'],
 })
-export class CustomersComponent implements OnInit {
+export class SuppliersComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  dataSource: MatTableDataSource<Customer>;
+  dataSource: MatTableDataSource<Supplier>;
   loading = true;
   displayedColumns: string[] = [
     'Id',
-    'FirstName',
-    'LastName',
+    'CompanyName',
+    'ContactName',
+    'ContactTitle',
     'City',
     'Country',
     'Phone',
+    'Fax',
     'Buttons',
   ];
 
   constructor(private ps: PrestoService) {}
 
   ngOnInit() {
-    this.getCustomers();
+    this.getSuppliers();
   }
 
-  async getCustomers() {
-    const suppliers = await this.ps.getCustomers();
+  async getSuppliers() {
+    const suppliers = await this.ps.getSuppliers();
     this.dataSource = new MatTableDataSource(suppliers || []);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -48,20 +50,20 @@ export class CustomersComponent implements OnInit {
     this.dataSource.paginator.firstPage();
     //this.dataSource.data isn't directly mutable
     const arr = this.dataSource.data;
-    arr.unshift(new Customer());
+    arr.unshift(new Supplier());
     this.dataSource.data = arr;
   }
-  async save(o: Customer) {
+  async save(o: Supplier) {
     o.edit = false;
-    if (o.Id) await this.ps.updateCustomer(o);
-    else await this.ps.createCustomer(o);
+    if (o.Id) await this.ps.updateSupplier(o);
+    else await this.ps.createSupplier(o);
     this.ngOnInit();
   }
-  delete(o: Customer) {
+  delete(o: Supplier) {
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != o.Id);
-    return this.ps.deleteCustomer(o);
+    return this.ps.deleteSupplier(o);
   }
-  cancel(o: Customer) {
+  cancel(o: Supplier) {
     o.edit = false;
     this.ngOnInit();
   }

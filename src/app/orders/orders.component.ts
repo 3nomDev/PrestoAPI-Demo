@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Order } from '../models/order';
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -42,15 +43,18 @@ export class OrdersComponent implements OnInit {
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
   addRow() {
+    this.dataSource.filter = '';
+    this.dataSource.paginator.firstPage();
     //this.dataSource.data isn't directly mutable
     const arr = this.dataSource.data;
     arr.unshift(new Order());
     this.dataSource.data = arr;
   }
-  save(o: Order) {
+  async save(o: Order) {
     o.edit = false;
-    if (o.Id) return this.ps.updateOrder(o);
-    return this.ps.createOrder(o);
+    if (o.Id) await this.ps.updateOrder(o);
+    else await this.ps.createOrder(o);
+    this.ngOnInit();
   }
   delete(o: Order) {
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != o.Id);

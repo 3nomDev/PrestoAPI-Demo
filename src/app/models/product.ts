@@ -10,4 +10,7 @@ export class Product {
   Quantity: number;  
   CompanyName?: string;
   edit = false;
+  constructor() {
+    this.edit = true;
+  }
 }

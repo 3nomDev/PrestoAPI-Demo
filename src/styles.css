@@ -19,13 +19,15 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: grey;
 }
-
+.mat-elevation-z4 {
+  overflow: auto;
+}
 table {
   width: 100%;
 }
 .container {
-  width: 90%;
-  margin: 1rem auto auto;
+  max-width: 1600px;
+  margin: 1% auto auto 1%;
 }
 .header-container {
   width: 100%;
@@ -48,7 +50,6 @@ table {
   justify-content: center;
   align-items: center;
 }
-
 .edit-btn {
   cursor: pointer;
   color: rgb(170, 170, 170);
@@ -59,14 +60,48 @@ table {
 .btn-container {
   text-align: right;
 }
-.btn-container button:nth-child(2) {
+/* .btn-container button:nth-child(2) {
   margin: 0 1rem;
-}
-.small-col {
-  max-width: 50px;
-}
+} */
 
-
+/* Material Changes */
+.mat-form-field-appearance-fill {
+  cursor: text;
+}
+.mat-form-field-appearance-fill .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline {
+  bottom: -0.05625em;
+}
+.mat-form-field-appearance-fill input.mat-input-element {
+  margin-top: -12px;
+  height: 27px;
+}
+/* .mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-fill.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
+  transform: translateY(-0.69375em) scale(0.75);
+}  */
+/* .edit-row td {
+  border-bottom-color: rgba(0, 0, 0, 0.87);
+} */
+@media screen and (max-width: 480px) {
+  .header-container {
+    display: block;
+  }
+  .header-container mat-form-field {
+    margin-left: 0;
+  }
+  th.mat-header-cell:last-of-type,
+  td.mat-cell:last-of-type,
+  td.mat-footer-cell:last-of-type {
+    padding-right: 0 !important;
+  }
+}
 
 /* Bootstrap Utilities */
 .w-25 {

@@ -5,4 +5,8 @@ export class Customer {
   City: string;
   Country: string;
   Phone: string;
+  edit=false;
+  constructor() {
+    this.edit = true;
+  }
 }
