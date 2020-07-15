@@ -2,3 +2,16 @@
   max-width: 600px;
   margin: 4rem auto;
 }
+h1 {
+  margin: 0 0 28px;
+  font-weight: 500;
+  font-size: 2em;
+}
+p {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+ul {
+  font-size: 16px;
+  line-height: 28px;
+}

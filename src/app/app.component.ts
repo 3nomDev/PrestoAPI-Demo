@@ -21,7 +21,14 @@ export class AppComponent implements OnInit {
   ) {}
   isMobile = window.screen.width < 450;
   myControl = new FormControl();
-  pages = ['orders', 'inventory', 'suppliers', 'customers'];
+  pages = [
+    'dashboard',
+    'orders',
+    'inventory',
+    'suppliers',
+    'customers',
+    'about',
+  ];
   filteredOptions: Observable<string[]>;
   openDialog(isLogin: boolean) {
     return this.dialog.open(LoginComponent, { data: isLogin });

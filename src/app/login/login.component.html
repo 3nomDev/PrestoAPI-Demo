@@ -2,7 +2,12 @@
 <p class="mb-4">Sign {{isLogin?'in':'up'}} to access protected endpoints (Post/Put/Delete)</p>
 <form #signForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="modal-body">
-        <mat-form-field >
+        <mat-form-field *ngIf="!isLogin">
+            <mat-label>Name</mat-label>
+            <input matInput name="nameField" [(ngModel)]="model.name" #nameModel="ngModel" required>
+            <mat-error *ngIf="nameModel.invalid">Name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
             <mat-label>Email</mat-label>
             <input matInput name="emailField" [(ngModel)]="model.email" #emailModel="ngModel" required email>
             <mat-error *ngIf="emailModel.hasError('required')">Email is required</mat-error>

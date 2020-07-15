@@ -223,15 +223,13 @@ export class PrestoService {
   }
   register(user: User) {
     return this.http
-      .post(this.projectBase, user)
+      .post(this.projectBase + 'register', user)
       .toPromise()
-      .catch(this.handleError);
   }
-  async login(model) {
+  async login(model: User) {
     const user = await this.http
       .post<User>(this.projectBase + 'login', model)
       .toPromise()
-      .catch(this.handleError);
     sessionStorage.setItem('uid', user.uid);
     sessionStorage.setItem('token', user.token);
     // sessionStorage.setItem(

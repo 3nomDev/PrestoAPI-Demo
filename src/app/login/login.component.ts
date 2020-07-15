@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PrestoService } from '../services/presto.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  model = { email: '', password: '' };
+  model = new User()
   hide = true;
   loading = false;
   errorMsg: string;
@@ -20,16 +21,33 @@ export class LoginComponent {
     @Inject(MAT_DIALOG_DATA) public isLogin: boolean
   ) {}
 
-  async onSubmit() {
+  onSubmit() {
     this.loading = true;
+    if(this.isLogin) this.login();
+    else this.register();
+
+  }
+  register(){
     this.ps
-      .login(this.model)
-      .then(() => this.dialogRef.close())
-      .catch((e: HttpErrorResponse) => {
-        if (e.status === 401) this.errorMsg = 'Incorrect Password';
-        else if (e.status === 404) this.errorMsg = 'User Not Found';
-        else this.errorMsg = e.message;
-      })
-      .finally(() => (this.loading = false));
+    .register(this.model)
+    .then(() => this.dialogRef.close())
+    .catch((e: HttpErrorResponse) => {
+      console.log("e: ",e);
+      if (e.status === 401) this.errorMsg = 'Incorrect Password';
+      else if (e.status === 404) this.errorMsg = 'User Not Found';
+      else this.errorMsg = e.error;
+    })
+    .finally(() => (this.loading = false));
+  }
+  login(){
+    this.ps
+    .login(this.model)
+    .then(() => this.dialogRef.close())
+    .catch((e: HttpErrorResponse) => {
+      if (e.status === 401) this.errorMsg = 'Incorrect Password';
+      else if (e.status === 404) this.errorMsg = 'User Not Found';
+      else this.errorMsg = e.error;
+    })
+    .finally(() => (this.loading = false));
   }
 }

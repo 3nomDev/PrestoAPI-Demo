@@ -2,14 +2,11 @@
   <button id="menu-button" mat-icon-button aria-label="Menu icon" (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <a id="logo" routerLink="home">
+  <a id="logo" routerLink="dashboard">
     <img class="mx-3" width="40" alt="Shop Logo" src="../assets/shop_icon.png">
     <span>Supply Chain Example</span>
   </a>
-  <div>
-    <button mat-button routerLink="dashboard" routerLinkActive="active-link">Dashboard</button>
-  </div>
-  <form id="search-container">
+  <form id="search-container" [class]="auto.isOpen?'opened':''">
     <input type="text" placeholder="Search..." aria-label="Search" [formControl]="myControl" [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="goToPage($event)">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option" [disabled]="option=='No results'">
