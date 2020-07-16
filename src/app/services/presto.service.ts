@@ -17,18 +17,15 @@ export class PrestoService {
   uid = sessionStorage.getItem('uid');
 
   constructor(private http: HttpClient) {
-    if (this.uid)
-      this.fetchUser().then((user) => {
-        if (user) this.user.next(user);
-      });
+    this.fetchUser();
   }
 
   /* Data Services */
 
   // Orders
-  getOrders() {
+  getOrders(): Promise<Order[]> {
     return this.http
-      .get<Order[]>(this.projectBase + 'orders')
+      .get(this.projectBase + 'orders')
       .toPromise()
       .catch(this.handleError);
   }
@@ -163,7 +160,7 @@ export class PrestoService {
   // Products
   getProducts() {
     return this.http
-      .get<Product[]>(this.projectBase + 'products')
+      .get<Product[]>(this.projectBase + 'products', this.getToken())
       .toPromise()
       .catch(this.handleError);
   }
@@ -204,38 +201,54 @@ export class PrestoService {
       .catch(this.handleError);
   }
 
-  /* Auth Services */
-  fetchUser() {
+  // Dashboard
+  getPieChart(): Promise<{ Country: string; Count: number }[]> {
     return this.http
+      .get(this.projectBase + 'pie-chart')
+      .toPromise()
+      .catch(this.handleError);
+  }
+  getDashCounts(): Promise<
+    {
+      Orders: number;
+      Customers: number;
+      Suppliers: number;
+      TotalAmount: number;
+    }[]
+  > {
+    return this.http
+      .get(this.projectBase + 'dash-counts')
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  /* Auth Services */
+  async fetchUser() {
+    if (!this.uid) return;
+    const user = await this.http
       .get<User>(this.projectBase + 'account/' + this.uid, this.getToken())
       .toPromise()
       .catch(this.handleError);
+    this.user.next(user);
   }
   get getCurrentUser() {
     return this.user.value;
   }
   getToken() {
-    // const expiresIn =  sessionStorage.getItem('expiresIn');
     const token = sessionStorage.getItem('token');
     return {
       headers: { Authorization: 'Bearer ' + token },
     };
   }
   register(user: User) {
-    return this.http
-      .post(this.projectBase + 'register', user)
-      .toPromise()
+    return this.http.post(this.projectBase + 'register', user).toPromise();
   }
   async login(model: User) {
     const user = await this.http
       .post<User>(this.projectBase + 'login', model)
-      .toPromise()
+      .toPromise();
     sessionStorage.setItem('uid', user.uid);
     sessionStorage.setItem('token', user.token);
-    // sessionStorage.setItem(
-    //   'expiresIn',
-    //   moment().add(120, 'minutes').toString()
-    // );
     this.user.next(user);
   }
   signOut() {
@@ -244,6 +257,7 @@ export class PrestoService {
   }
 
   handleError(error: HttpErrorResponse) {
+    error.status === 401;
     console.error(error.error);
     return error.error;
   }

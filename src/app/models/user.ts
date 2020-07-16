@@ -5,4 +5,6 @@ export class User {
   created: string;
   lastLogin: string;
   token: string;
+  password?: string;
+  expMinutes:number
 }

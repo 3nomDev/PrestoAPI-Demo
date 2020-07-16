@@ -4,6 +4,8 @@ import { Product } from '../models/product';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../login/login.component';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -13,7 +15,6 @@ export class InventoryComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   dataSource: MatTableDataSource<Product>;
-  products: Product[];
   loading = true;
   displayedColumns: string[] = [
     'Id',
@@ -25,15 +26,15 @@ export class InventoryComponent implements OnInit {
     'Buttons',
   ];
 
-  constructor(private ps: PrestoService) {}
+  constructor(private ps: PrestoService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.getProducts();
   }
 
   async getProducts() {
-    this.products = (await this.ps.getProducts()) || [];
-    this.dataSource = new MatTableDataSource(this.products);
+    const products = await this.ps.getProducts();
+    this.dataSource = new MatTableDataSource(products || []);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loading = false;
@@ -51,6 +52,10 @@ export class InventoryComponent implements OnInit {
     arr.unshift(new Product());
     this.dataSource.data = arr;
   }
+  edit(p: Product) {
+    if (this.ps.getCurrentUser) p.edit = true;
+    else this.openDialog();
+  }
   async save(p: Product) {
     p.edit = false;
     if (p.Id) await this.ps.updateProduct(p);
@@ -64,5 +69,8 @@ export class InventoryComponent implements OnInit {
   cancel(p: Product) {
     p.edit = false;
     this.ngOnInit();
+  }
+  openDialog() {
+    return this.dialog.open(LoginComponent);
   }
 }
