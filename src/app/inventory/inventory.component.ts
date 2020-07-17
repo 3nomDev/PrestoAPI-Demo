@@ -45,6 +45,7 @@ export class InventoryComponent implements OnInit {
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
   addRow() {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.filter = '';
     this.dataSource.paginator.firstPage();
     //this.dataSource.data isn't directly mutable
@@ -53,8 +54,8 @@ export class InventoryComponent implements OnInit {
     this.dataSource.data = arr;
   }
   edit(p: Product) {
-    if (this.ps.getCurrentUser) p.edit = true;
-    else this.openDialog();
+    if (!this.ps.getCurrentUser) return this.openDialog();
+    p.edit = true;
   }
   async save(p: Product) {
     p.edit = false;

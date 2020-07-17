@@ -1,32 +1,32 @@
-<mat-grid-list cols="4" gutterSize='10' rowHeight="3:1">
+<mat-grid-list [cols]="breakpoint" gutterSize='10' rowHeight="3:1">
     <mat-grid-tile rowspan="1">
-        <mat-card>
+        <mat-card class="blue">
             <mat-card-title>Orders</mat-card-title>
-            <h1>{{counts.Orders}}</h1>
+            <h1>{{orders$|async}}</h1>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile rowspan="1">
-        <mat-card>
+        <mat-card class="green">
             <mat-card-title>Customers</mat-card-title>
-            <h1>{{counts.Customers}}</h1>
+            <h1>{{customers$|async}}</h1>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile rowspan="1">
-        <mat-card>
+        <mat-card class="yellow">
             <mat-card-title>Suppliers</mat-card-title>
-            <h1>{{counts.Suppliers}}</h1>
+            <h1>{{suppliers$|async}}</h1>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile rowspan="1">
-        <mat-card>
+        <mat-card class="red">
             <mat-card-title>Total Revenue</mat-card-title>
-            <h1>{{counts.TotalAmount}}</h1>
+            <h1>{{totalAmount$ | async | currency}}</h1>
         </mat-card>
     </mat-grid-tile>
-    <mat-grid-tile colspan="2" rowspan="4">
+    <mat-grid-tile [colspan]="breakpoint<2?'1':'2'" rowspan="4">
         <canvas #pieChart></canvas>
     </mat-grid-tile>
-    <mat-grid-tile colspan="2" rowspan="4">
+    <mat-grid-tile [colspan]="breakpoint<2?'1':'2'" rowspan="4">
         <canvas #lineChart></canvas>
     </mat-grid-tile>
 </mat-grid-list>

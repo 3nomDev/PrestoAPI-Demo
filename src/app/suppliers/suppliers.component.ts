@@ -4,6 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Supplier } from '../models/supplier';
 import { PrestoService } from '../services/presto.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-suppliers',
@@ -27,7 +29,7 @@ export class SuppliersComponent implements OnInit {
     'Buttons',
   ];
 
-  constructor(private ps: PrestoService) {}
+  constructor(private ps: PrestoService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.getSuppliers();
@@ -46,6 +48,7 @@ export class SuppliersComponent implements OnInit {
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
   addRow() {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.filter = '';
     this.dataSource.paginator.firstPage();
     //this.dataSource.data isn't directly mutable
@@ -53,18 +56,25 @@ export class SuppliersComponent implements OnInit {
     arr.unshift(new Supplier());
     this.dataSource.data = arr;
   }
-  async save(o: Supplier) {
-    o.edit = false;
-    if (o.Id) await this.ps.updateSupplier(o);
-    else await this.ps.createSupplier(o);
+  edit(s: Supplier) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
+    s.edit = true;
+  }
+  async save(s: Supplier) {
+    s.edit = false;
+    if (s.Id) await this.ps.updateSupplier(s);
+    else await this.ps.createSupplier(s);
     this.ngOnInit();
   }
-  delete(o: Supplier) {
-    this.dataSource.data = this.dataSource.data.filter((d) => d.Id != o.Id);
-    return this.ps.deleteSupplier(o);
+  delete(s: Supplier) {
+    this.dataSource.data = this.dataSource.data.filter((d) => d.Id != s.Id);
+    return this.ps.deleteSupplier(s);
   }
-  cancel(o: Supplier) {
-    o.edit = false;
+  cancel(s: Supplier) {
+    s.edit = false;
     this.ngOnInit();
+  }
+  openDialog() {
+    return this.dialog.open(LoginComponent);
   }
 }

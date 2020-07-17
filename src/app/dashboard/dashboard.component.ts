@@ -3,6 +3,9 @@ import * as Chart from 'chart.js';
 import * as moment from 'moment';
 import { PrestoService } from '../services/presto.service';
 import { CurrencyPipe } from '@angular/common';
+import { scan, takeWhile, delay, map } from 'rxjs/operators';
+import { timer, Observable, BehaviorSubject } from 'rxjs';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -10,29 +13,29 @@ import { CurrencyPipe } from '@angular/common';
   providers: [CurrencyPipe],
 })
 export class DashboardComponent implements OnInit {
-  loading = true;
-  counts = {
-    Orders: 0,
-    Customers: 0,
-    Suppliers: 0,
-    TotalAmount: 0,
-  };
-  constructor(private ps: PrestoService, private cp: CurrencyPipe) {}
   @ViewChild('pieChart') pieElement: ElementRef;
   @ViewChild('barChart') barElement: ElementRef;
   @ViewChild('lineChart') lineElement: ElementRef;
+  orders$ = new BehaviorSubject<number>(0);
+  customers$ = new BehaviorSubject<number>(0);
+  suppliers$ = new BehaviorSubject<number>(0);
+  totalAmount$ = new BehaviorSubject<number>(0);
 
-  ngOnInit(): void {}
-  ngAfterViewInit() {
+  constructor(private ps: PrestoService, private cp: CurrencyPipe) {}
+
+  ngOnInit() {
+    this.startCounters();
     this.getTotalCounts();
+  }
+
+  ngAfterViewInit() {
     this.initPie();
     this.initLine();
   }
 
   async getTotalCounts() {
-    const data = (await this.ps.getDashCounts()) || [];
-    console.log("data: ",data);
-    this.counts = data[0];
+    this.counts = await this.ps.getDashCounts();
+    this.stopCounters();
   }
 
   async initPie() {
@@ -119,6 +122,7 @@ export class DashboardComponent implements OnInit {
       values: [...groupedByDate.values()],
     };
   }
+
   formatCountries(data: any[]) {
     var countries: string[] = [];
     var counts: number[] = [];
@@ -134,6 +138,53 @@ export class DashboardComponent implements OnInit {
     counts.push(otherCount);
     return { countries, counts };
   }
+
+  startCounters() {
+    //increasing counters before actual data received
+    timer(0, 30)
+      .pipe(
+        scan((acc) => ++acc, 700),
+        takeWhile((x) => x <= this.counts.Orders)
+      )
+      .subscribe(this.orders$);
+    timer(0, 30)
+      .pipe(
+        scan((acc) => ++acc, 0),
+        takeWhile((x) => x < this.counts.Customers)
+      )
+      .subscribe(this.customers$);
+    timer(0, 30)
+      .pipe(
+        scan((acc) => ++acc, 0),
+        takeWhile((x) => x < this.counts.Suppliers)
+      )
+      .subscribe(this.suppliers$);
+    timer(0, 30)
+      .pipe(
+        scan((acc) => ++acc, this.counts.TotalAmount - 200),
+        takeWhile((x) => x < this.counts.TotalAmount)
+      )
+      .subscribe(this.totalAmount$);
+  }
+  stopCounters() {
+    // Stop once we get actual values
+    this.orders$ = new BehaviorSubject<number>(this.counts.Orders);
+    this.customers$ = new BehaviorSubject<number>(this.counts.Customers);
+    this.suppliers$ = new BehaviorSubject<number>(this.counts.Suppliers);
+    this.totalAmount$ = new BehaviorSubject<number>(this.counts.TotalAmount);
+  }
+
+  // Responsive Grid Breakpoints
+  breakpoint = window.innerWidth < 480 ? 1 : window.innerWidth < 1000 ? 2 : 4;
+
+  //some sample data for counters
+  counts = {
+    Orders: 833,
+    Customers: 90,
+    Suppliers: 28,
+    TotalAmount: 1355778,
+  };
+
   backgroundColors = [
     'rgba(255, 99, 132, 0.4)',
     'rgba(54, 162, 235, 0.4)',

@@ -6,7 +6,7 @@ import { Customer } from '../models/customer';
 import { Supplier } from '../models/supplier';
 import { User } from '../models/user';
 import { BehaviorSubject } from 'rxjs';
-// import * as moment from 'moment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -208,16 +208,15 @@ export class PrestoService {
       .toPromise()
       .catch(this.handleError);
   }
-  getDashCounts(): Promise<
-    {
-      Orders: number;
-      Customers: number;
-      Suppliers: number;
-      TotalAmount: number;
-    }[]
-  > {
+  getDashCounts(): Promise<{
+    Orders: number;
+    Customers: number;
+    Suppliers: number;
+    TotalAmount: number;
+  }> {
     return this.http
       .get(this.projectBase + 'dash-counts')
+      .pipe(map((data) => data[0]))
       .toPromise()
       .catch(this.handleError);
   }

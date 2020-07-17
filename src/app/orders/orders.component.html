@@ -73,7 +73,7 @@
                         </button>
                         <mat-menu #editMenu="matMenu" xPosition="before">
                             <ng-container *ngIf="!row.edit">
-                                <button mat-menu-item (click)="row.edit=true">
+                                <button mat-menu-item (click)="edit(row)">
                                     <mat-icon>edit</mat-icon>
                                     <span>Edit</span>
                                 </button>

@@ -1,7 +1,20 @@
 mat-card {
   width: 75%;
+  color: white;
 }
 h1 {
   font-size: 2rem;
   float: right;
+}
+.blue {
+  background: #479bff;
+}
+.green {
+  background: #3cdab9;
+}
+.yellow{
+  background: #ffb852;
+}
+.red{
+  background: #ff5874;
 }

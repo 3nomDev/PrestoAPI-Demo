@@ -4,6 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Order } from '../models/order';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-orders',
@@ -24,7 +26,7 @@ export class OrdersComponent implements OnInit {
     'Buttons',
   ];
 
-  constructor(private ps: PrestoService) {}
+  constructor(private ps: PrestoService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.getOrders();
@@ -43,12 +45,17 @@ export class OrdersComponent implements OnInit {
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
   addRow() {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.filter = '';
     this.dataSource.paginator.firstPage();
     //this.dataSource.data isn't directly mutable
     const arr = this.dataSource.data;
     arr.unshift(new Order());
     this.dataSource.data = arr;
+  }
+  edit(o: Order) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
+    o.edit = true;
   }
   async save(o: Order) {
     o.edit = false;
@@ -63,5 +70,8 @@ export class OrdersComponent implements OnInit {
   cancel(o: Order) {
     o.edit = false;
     this.ngOnInit();
+  }
+  openDialog() {
+    return this.dialog.open(LoginComponent);
   }
 }
