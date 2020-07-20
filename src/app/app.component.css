@@ -18,11 +18,8 @@ mat-toolbar.mat-toolbar {
   min-width: 200px;
 }
 mat-sidenav-content {
-  padding: 2rem 3rem;
+  padding: 2rem 3rem 0;
   background: #f7f7f7;
-}
-#app-container {
-  height: 100%;
   margin-top: 64px;
 }
 #logo {
@@ -33,7 +30,8 @@ mat-sidenav-content {
   margin-right: 1.5rem;
 }
 .active-link {
-  background: rgba(255, 255, 255, 0.1);
+  background: #d6d6d670;
+  font-weight: 500;
 }
 mat-nav-list a {
   text-transform: capitalize;
@@ -88,7 +86,7 @@ mat-nav-list a {
   }
 }
 @media (max-width: 599px) {
-  #app-container {
+  mat-sidenav-content {
     margin-top: 56px;
   }
 }

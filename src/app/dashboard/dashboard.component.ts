@@ -5,6 +5,10 @@ import { PrestoService } from '../services/presto.service';
 import { CurrencyPipe } from '@angular/common';
 import { scan, takeWhile, delay, map } from 'rxjs/operators';
 import { timer, Observable, BehaviorSubject } from 'rxjs';
+import { Order } from '../models/order';
+import { Customer } from '../models/customer';
+import { Supplier } from '../models/supplier';
+import { Product } from '../models/product';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,12 +24,24 @@ export class DashboardComponent implements OnInit {
   customers$ = new BehaviorSubject<number>(0);
   suppliers$ = new BehaviorSubject<number>(0);
   totalAmount$ = new BehaviorSubject<number>(0);
+  loading: boolean[] = new Array(5).fill(true);
+  orders: Order[];
+  orderColumns: string[];
+  customers: Customer[];
+  customerColumns: string[];
+  suppliers: Supplier[];
+  supplierColumns: string[];
+  products: Product[];
+  productColumns: string[];
 
   constructor(private ps: PrestoService, private cp: CurrencyPipe) {}
 
   ngOnInit() {
     this.startCounters();
     this.getTotalCounts();
+    this.getCustomers();
+    this.getSuppliers();
+    this.getProducts();
   }
 
   ngAfterViewInit() {
@@ -36,6 +52,39 @@ export class DashboardComponent implements OnInit {
   async getTotalCounts() {
     this.counts = await this.ps.getDashCounts();
     this.stopCounters();
+  }
+
+  async getCustomers() {
+    this.customers = await this.ps.getCustomers();
+    if (this.customers) {
+      this.customerColumns = Object.keys(this.customers[0]);
+      this.customers.reverse().length = 10;
+    }
+    this.loading[3] = false;
+  }
+
+  async getSuppliers() {
+    this.suppliers = await this.ps.getSuppliersSales();
+    if (this.suppliers) {
+      this.suppliers.length = 10;
+      this.supplierColumns = Object.keys(this.suppliers[0]);
+    }
+    this.loading[4] = false;
+  }
+
+  async getProducts() {
+    this.products = await this.ps.getProducts();
+    if (this.products) {
+      this.productColumns = [
+        'Id',
+        'ProductName',
+        'SupplierId',
+        'CompanyName',
+        'Quantity',
+      ];
+      this.products.sort((a, b) => a.Quantity - b.Quantity).length = 10;
+    }
+    this.loading[5] = false;
   }
 
   async initPie() {
@@ -62,12 +111,14 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
+    this.loading[0] = false;
   }
 
   async initLine() {
-    const data = await this.ps.getOrders();
-    if (!data) return;
-    const formatted = this.formatDates(data);
+    this.orders = await this.ps.getOrders();
+    if (!this.orders) return;
+    this.orderColumns = Object.keys(this.orders[0]);
+    const formatted = this.formatDates();
     new Chart(this.lineElement.nativeElement, {
       type: 'line',
       data: {
@@ -75,8 +126,8 @@ export class DashboardComponent implements OnInit {
         datasets: [
           {
             data: formatted.values,
-            backgroundColor: this.backgroundColors,
-            borderWidth: 1,
+            backgroundColor: '#aad5f2',
+            pointBackgroundColor: '#479bff',
           },
         ],
       },
@@ -104,11 +155,14 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
+    this.loading[1] = false;
+    this.orders.reverse().length = 10;
+    this.loading[2] = false;
   }
 
-  formatDates(data: any[]) {
+  formatDates() {
     // This groups and sums order amounts by date
-    const groupedByDate = data.reduce(
+    const groupedByDate = this.orders.reduce(
       (entryMap, e) =>
         entryMap.set(
           moment(e.OrderDate).format('MMM YY'),

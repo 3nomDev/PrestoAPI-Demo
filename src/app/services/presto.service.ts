@@ -80,6 +80,12 @@ export class PrestoService {
       .toPromise()
       .catch(this.handleError);
   }
+  getSuppliersSales() {
+    return this.http
+      .get<Supplier[]>(this.projectBase + 'supplier-sales')
+      .toPromise()
+      .catch(this.handleError);
+  }
   createSupplier(s: Supplier) {
     delete s.Id; //Identity Column
     delete s.edit;
@@ -116,9 +122,9 @@ export class PrestoService {
   }
 
   //Customers
-  getCustomers() {
+  getCustomers(): Promise<Customer[]> {
     return this.http
-      .get<Customer>(this.projectBase + 'customers')
+      .get(this.projectBase + 'customers')
       .toPromise()
       .catch(this.handleError);
   }

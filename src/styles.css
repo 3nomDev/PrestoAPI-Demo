@@ -1,8 +1,6 @@
 html,
 body {
   height: 100%;
-}
-body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -27,7 +25,7 @@ table {
 }
 .container {
   max-width: 1600px;
-  margin: 1% auto auto 1%;
+  margin: 1% auto 9rem 1%;
 }
 .header-container {
   width: 100%;
