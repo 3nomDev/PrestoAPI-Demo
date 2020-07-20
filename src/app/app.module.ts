@@ -36,7 +36,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -75,10 +75,13 @@ import {MatCardModule} from '@angular/material/card';
     MatTableModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
-    MatCardModule
+    MatCardModule,
   ],
   providers: [
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { width: '500px' } },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { width: '500px', hasBackdrop: true },
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -5,6 +5,9 @@ mat-form-field {
   width: 75%;
   margin: auto;
 }
+.mat-icon img {
+  width: 24px;
+}
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -14,6 +17,21 @@ mat-form-field {
   margin: auto auto auto 0;
   font-size: 12px;
 }
+#social-container {
+  display: flex;
+  padding: 1rem 3.5rem 0rem;
+  margin-top: 2rem;
+  justify-content: space-between;
+  border-top: solid 1px lightgray;
+  align-items: baseline;
+}
+#social-container p {
+  font-weight: 500;
+}
+#social-container button:nth-of-type(2) {
+  margin: 0 1rem;
+}
+
 @media (max-width: 480px) {
   .modal-footer a {
     display: none;

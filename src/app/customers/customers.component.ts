@@ -65,6 +65,7 @@ export class CustomersComponent implements OnInit {
     this.ngOnInit();
   }
   delete(c: Customer) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != c.Id);
     return this.ps.deleteCustomer(c);
   }

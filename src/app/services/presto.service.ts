@@ -13,15 +13,14 @@ import { map } from 'rxjs/operators';
 })
 export class PrestoService {
   user = new BehaviorSubject<User>(null);
-  projectBase = 'https://demo.prestoapi.com/api/';
   uid = sessionStorage.getItem('uid');
+  projectBase = 'https://demo.prestoapi.com/api/';
 
   constructor(private http: HttpClient) {
     this.fetchUser();
   }
 
   /* Data Services */
-
   // Orders
   getOrders(): Promise<Order[]> {
     return this.http
@@ -60,29 +59,10 @@ export class PrestoService {
       .catch(this.handleError);
   }
 
-  getInvoices() {
-    return this.http
-      .get(this.projectBase + 'invoices')
-      .toPromise()
-      .catch(this.handleError);
-  }
-  getShipment() {
-    return this.http
-      .get(this.projectBase + 'shipment')
-      .toPromise()
-      .catch(this.handleError);
-  }
-
   // Suppliers
   getSuppliers() {
     return this.http
       .get<Supplier[]>(this.projectBase + 'suppliers')
-      .toPromise()
-      .catch(this.handleError);
-  }
-  getSuppliersSales() {
-    return this.http
-      .get<Supplier[]>(this.projectBase + 'supplier-sales')
       .toPromise()
       .catch(this.handleError);
   }
@@ -214,6 +194,12 @@ export class PrestoService {
       .toPromise()
       .catch(this.handleError);
   }
+  getSuppliersSales() {
+    return this.http
+      .get<Supplier[]>(this.projectBase + 'supplier-sales')
+      .toPromise()
+      .catch(this.handleError);
+  }
   getDashCounts(): Promise<{
     Orders: number;
     Customers: number;
@@ -230,11 +216,19 @@ export class PrestoService {
   /* Auth Services */
   async fetchUser() {
     if (!this.uid) return;
-    const user = await this.http
+    let user: User = await this.http
       .get<User>(this.projectBase + 'account/' + this.uid, this.getToken())
       .toPromise()
       .catch(this.handleError);
+    user = this.formatPhoto(user);
     this.user.next(user);
+  }
+  formatPhoto(user: User) {
+    if (user.metadata) {
+      const meta = JSON.parse(user.metadata);
+      if (meta && meta.photo) user.photo = meta.photo;
+    }
+    return user;
   }
   get getCurrentUser() {
     return this.user.value;
@@ -246,14 +240,17 @@ export class PrestoService {
     };
   }
   register(user: User) {
+    delete user.token;
+    user.metadata = JSON.stringify(user.metadata);
     return this.http.post(this.projectBase + 'register', user).toPromise();
   }
   async login(model: User) {
-    const user = await this.http
+    let user = await this.http
       .post<User>(this.projectBase + 'login', model)
       .toPromise();
     sessionStorage.setItem('uid', user.uid);
     sessionStorage.setItem('token', user.token);
+    user = this.formatPhoto(user);
     this.user.next(user);
   }
   signOut() {
@@ -262,7 +259,6 @@ export class PrestoService {
   }
 
   handleError(error: HttpErrorResponse) {
-    error.status === 401;
     console.error(error.error);
     return error.error;
   }

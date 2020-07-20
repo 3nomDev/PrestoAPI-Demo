@@ -64,6 +64,7 @@ export class InventoryComponent implements OnInit {
     this.ngOnInit();
   }
   delete(p: Product) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != p.Id);
     return this.ps.deleteProduct(p);
   }

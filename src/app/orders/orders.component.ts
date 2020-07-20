@@ -30,6 +30,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.getOrders();
+    console.log('getCurrentUser: ', this.ps.getCurrentUser);
   }
 
   async getOrders() {
@@ -64,6 +65,7 @@ export class OrdersComponent implements OnInit {
     this.ngOnInit();
   }
   delete(o: Order) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != o.Id);
     return this.ps.deleteOrder(o);
   }

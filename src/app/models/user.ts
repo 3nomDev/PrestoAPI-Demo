@@ -2,9 +2,12 @@ export class User {
   uid: string;
   name: string;
   email: string;
-  created: string;
-  lastLogin: string;
-  token: string;
+  created?: string;
+  lastLogin?: string;
+  token?: string;
   password?: string;
-  expMinutes:number
+  provider?: string;
+  expMinutes?: number;
+  photo?: string;
+  metadata?;
 }

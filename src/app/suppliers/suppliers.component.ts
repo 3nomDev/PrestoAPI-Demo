@@ -67,6 +67,7 @@ export class SuppliersComponent implements OnInit {
     this.ngOnInit();
   }
   delete(s: Supplier) {
+    if (!this.ps.getCurrentUser) return this.openDialog();
     this.dataSource.data = this.dataSource.data.filter((d) => d.Id != s.Id);
     return this.ps.deleteSupplier(s);
   }

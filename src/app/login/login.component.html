@@ -1,3 +1,5 @@
+<!-- Both Register and Login Component -->
+
 <h2>Sign {{isLogin?'In':'Up'}}</h2>
 <p class="mb-4">Sign {{isLogin?'in':'up'}} to access protected endpoints (Post/Put/Delete)</p>
 <form #signForm="ngForm" (ngSubmit)="onSubmit()">
@@ -32,6 +34,20 @@
             <button mat-raised-button type="button" (click)="dialogRef.close()">Cancel</button>
             <button mat-raised-button type="submit" color="primary" [disabled]="signForm.invalid"
                 class="ml-3">Submit</button>
+        </div>
+    </div>
+    <div id="social-container" *ngIf="!loading">
+        <p>Or Sign {{isLogin?'In':'Up'}} with</p>
+        <div>
+            <button id="google" type="button" mat-mini-fab color="light" aria-label="Google Sign In">
+                <mat-icon><img src="assets/Google_Logo.svg"></mat-icon>
+            </button>
+            <button id="fb" type="button" mat-mini-fab color="light" aria-label="Facebook Sign In" (click)="fbSignIn()">
+                <mat-icon><img src="assets/Facebook_Logo.svg"></mat-icon>
+            </button>
+            <button id="git" type="button" mat-mini-fab color="light" aria-label="GitHub Sign In" (click)="gitSignIn()">
+                <mat-icon><img src="assets/GitHub_Logo.svg"></mat-icon>
+            </button>
         </div>
     </div>
 </form>
