@@ -9,5 +9,5 @@ export class User {
   provider?: string;
   expMinutes?: number;
   photo?: string;
-  metadata?;
+  metadata?: any;
 }

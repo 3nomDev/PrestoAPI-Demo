@@ -17,14 +17,17 @@ export class PrestoService {
   projectBase = 'https://demo.prestoapi.com/api/';
 
   constructor(private http: HttpClient) {
+    // Get the current user on every page reload
     this.fetchUser();
   }
 
+  /* Note: The following methods use promises instead of subscriptions to avoid potential memory leaks */
+
   /* Data Services */
   // Orders
-  getOrders(): Promise<Order[]> {
+  getOrders() {
     return this.http
-      .get(this.projectBase + 'orders')
+      .get<Order[]>(this.projectBase + 'orders')
       .toPromise()
       .catch(this.handleError);
   }
@@ -102,9 +105,9 @@ export class PrestoService {
   }
 
   //Customers
-  getCustomers(): Promise<Customer[]> {
+  getCustomers() {
     return this.http
-      .get(this.projectBase + 'customers')
+      .get<Customer[]>(this.projectBase + 'customers')
       .toPromise()
       .catch(this.handleError);
   }
@@ -188,9 +191,9 @@ export class PrestoService {
   }
 
   // Dashboard
-  getPieChart(): Promise<{ Country: string; Count: number }[]> {
+  getPieChart() {
     return this.http
-      .get(this.projectBase + 'pie-chart')
+      .get<{ Country: string; Count: number }[]>(this.projectBase + 'pie-chart')
       .toPromise()
       .catch(this.handleError);
   }
@@ -216,7 +219,7 @@ export class PrestoService {
   /* Auth Services */
   async fetchUser() {
     if (!this.uid) return;
-    let user: User = await this.http
+    let user = await this.http
       .get<User>(this.projectBase + 'account/' + this.uid, this.getToken())
       .toPromise()
       .catch(this.handleError);
@@ -224,7 +227,7 @@ export class PrestoService {
     this.user.next(user);
   }
   formatPhoto(user: User) {
-    if (user.metadata) {
+    if (user && user.metadata) {
       const meta = JSON.parse(user.metadata);
       if (meta && meta.photo) user.photo = meta.photo;
     }
@@ -232,6 +235,19 @@ export class PrestoService {
   }
   get getCurrentUser() {
     return this.user.value;
+  }
+  async getGitHubUser(body) {
+    const tokenUrl = 'https://github.com/login/oauth/access_token';
+    const userUrl = 'https://api.github.com/user';
+    const token = await this.http
+      .post<{ access_token: string }>(tokenUrl, body)
+      .toPromise();
+    const gitUser = await this.http
+      .get<{ name: string; email: string; avatar_url: string }>(userUrl, {
+        headers: { Authorization: 'token ' + token },
+      })
+      .toPromise();
+    return { ...gitUser, token: token.access_token };
   }
   getToken() {
     const token = sessionStorage.getItem('token');
@@ -260,6 +276,6 @@ export class PrestoService {
 
   handleError(error: HttpErrorResponse) {
     console.error(error.error);
-    return error.error;
+    return Promise.reject(error.error);
   }
 }

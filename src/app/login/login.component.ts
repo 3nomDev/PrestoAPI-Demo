@@ -18,12 +18,17 @@ export class LoginComponent {
   loading = false;
   errorMsg = '';
   socialLogin = false;
+  isLogin = false;
+  gitCode: string;
 
   constructor(
     private ps: PrestoService,
     public dialogRef: MatDialogRef<LoginComponent>,
-    @Inject(MAT_DIALOG_DATA) public isLogin: boolean
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: { isLogin: boolean; gitCode: string }
+  ) {
+    this.isLogin = data.isLogin;
+    if (data.gitCode) this.getGitHubToken(data.gitCode);
+  }
 
   onSubmit() {
     this.loading = true;
@@ -64,6 +69,25 @@ export class LoginComponent {
     url += '?client_id=' + environment.gitHubClientId;
     window.location.href = url;
   }
+  async getGitHubToken(code: string) {
+    this.loading = true;
+    const body = {
+      client_id: environment.gitHubClientId,
+      client_secret: environment.gitHubSecret,
+      code: code,
+    };
+    this.ps
+      .getGitHubUser(body)
+      .then((res) => {
+        this.model.name = res.name;
+        this.model.email = res.email;
+        this.model.metadata = { photo: res.avatar_url };
+        this.model.provider = 'github';
+        this.onSubmit();
+      })
+      .catch((err) => console.error(err))
+      .finally(() => (this.loading = false));
+  }
   fbInit() {
     FB.init({
       appId: environment.fbAppId,
@@ -78,9 +102,17 @@ export class LoginComponent {
       (response) => {
         console.log('response: ', response);
         if (response.authResponse) {
+          this.model.token = response.authResponse.accessToken;
           console.log('Welcome!  Fetching your information.... ');
-          FB.api('/me', (response) => {
-            console.log('response2: ', response);
+          FB.api('/me', (res) => {
+            console.log('res: ', res);
+            this.model.name = res.name;
+            this.model.email = res.email;
+            this.model.metadata = {
+              photo: res.profile_pic,
+            };
+            this.model.provider = 'facebook';
+            this.onSubmit();
           });
         } else {
           console.log('User cancelled login or did not fully authorize.');

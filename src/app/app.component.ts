@@ -5,7 +5,7 @@ import { PrestoService } from './services/presto.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public ps: PrestoService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
   isMobile = window.screen.width < 450;
   myControl = new FormControl();
@@ -30,10 +31,11 @@ export class AppComponent implements OnInit {
     'about',
   ];
   filteredOptions: Observable<string[]>;
-  openDialog(isLogin: boolean) {
-    return this.dialog.open(LoginComponent, { data: isLogin });
+  openDialog(isLogin: boolean, gitCode?: string) {
+    return this.dialog.open(LoginComponent, { data: { isLogin, gitCode } });
   }
   ngOnInit() {
+    this.checkGitHubRedirect();
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
@@ -49,5 +51,9 @@ export class AppComponent implements OnInit {
       option.toLowerCase().includes(filterValue)
     );
     return f.length === 0 ? ['No results'] : f;
+  }
+  checkGitHubRedirect() {
+    const code = this.route.snapshot.queryParamMap.get('code');
+    if (code) this.openDialog(false, code);
   }
 }
