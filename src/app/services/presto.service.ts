@@ -240,7 +240,9 @@ export class PrestoService {
     const tokenUrl = 'https://github.com/login/oauth/access_token';
     const userUrl = 'https://api.github.com/user';
     const token = await this.http
-      .post<{ access_token: string }>(tokenUrl, body)
+      .post<{ access_token: string }>(tokenUrl, body, {
+        headers: { Accept: 'application/json' },
+      })
       .toPromise();
     const gitUser = await this.http
       .get<{ name: string; email: string; avatar_url: string }>(userUrl, {

@@ -108,9 +108,10 @@ export class LoginComponent {
             console.log('res: ', res);
             this.model.name = res.name;
             this.model.email = res.email;
-            this.model.metadata = {
-              photo: res.profile_pic,
-            };
+            if (res.profile_pic)
+              this.model.metadata = {
+                photo: res.profile_pic,
+              };
             this.model.provider = 'facebook';
             this.onSubmit();
           });
@@ -118,9 +119,7 @@ export class LoginComponent {
           console.log('User cancelled login or did not fully authorize.');
         }
       },
-      (err) => {
-        console.log('err: ', err);
-      }
+      { scope: 'email', return_scopes: true }
     );
   }
 
