@@ -1,53 +1,63 @@
 <!-- Both Register and Login Component -->
+<ng-container *ngIf="!success">
+    <h2>Sign {{isLogin?'In':'Up'}}</h2>
+    <p class="mb-4">Sign {{isLogin?'in':'up'}} to access protected endpoints (Post/Put/Delete)</p>
+    <form #signForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+            <mat-form-field *ngIf="!isLogin">
+                <mat-label>Name</mat-label>
+                <input matInput name="nameField" [(ngModel)]="model.name" #nameModel="ngModel" required>
+                <mat-error *ngIf="nameModel.invalid">Name is required</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput name="emailField" [(ngModel)]="model.email" #emailModel="ngModel" required email>
+                <mat-error *ngIf="emailModel.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="emailModel.hasError('email') ">Not a valid email</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput name="passwordField" [(ngModel)]="model.password" #pswdModel="ngModel"
+                    [type]="hide ? 'password' : 'text'" required>
+                <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="pswdModel.invalid">Password is required</mat-error>
+            </mat-form-field>
+            <mat-error>{{errorMsg}}</mat-error>
 
-<h2>Sign {{isLogin?'In':'Up'}}</h2>
-<p class="mb-4">Sign {{isLogin?'in':'up'}} to access protected endpoints (Post/Put/Delete)</p>
-<form #signForm="ngForm" (ngSubmit)="onSubmit()">
-    <div class="modal-body">
-        <mat-form-field *ngIf="!isLogin">
-            <mat-label>Name</mat-label>
-            <input matInput name="nameField" [(ngModel)]="model.name" #nameModel="ngModel" required>
-            <mat-error *ngIf="nameModel.invalid">Name is required</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput name="emailField" [(ngModel)]="model.email" #emailModel="ngModel" required email>
-            <mat-error *ngIf="emailModel.hasError('required')">Email is required</mat-error>
-            <mat-error *ngIf="emailModel.hasError('email') ">Not a valid email</mat-error>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput name="passwordField" [(ngModel)]="model.password" #pswdModel="ngModel"
-                [type]="hide ? 'password' : 'text'" required>
-            <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="pswdModel.invalid">Password is required</mat-error>
-        </mat-form-field>
-        <mat-error>{{errorMsg}}</mat-error>
-
-        <div class="flex-center" *ngIf="loading">
-            <mat-spinner diameter="40"></mat-spinner>
+            <div class="flex-center" *ngIf="loading">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+            <div class="modal-footer" *ngIf="!loading">
+                <a (click)="isLogin=!isLogin" [routerLink]="">I {{isLogin?'don\'t':'already'}} have an account</a>
+                <button mat-raised-button type="button" (click)="dialogRef.close()">Cancel</button>
+                <button mat-raised-button type="submit" color="primary" [disabled]="signForm.invalid"
+                    class="ml-3">Submit</button>
+            </div>
         </div>
-        <div class="modal-footer" *ngIf="!loading">
-            <a (click)="isLogin=!isLogin" [routerLink]="">I {{isLogin?'don\'t':'already'}} have an account</a>
-            <button mat-raised-button type="button" (click)="dialogRef.close()">Cancel</button>
-            <button mat-raised-button type="submit" color="primary" [disabled]="signForm.invalid"
-                class="ml-3">Submit</button>
+        <div id="social-container" *ngIf="!loading">
+            <p>Or Sign {{isLogin?'In':'Up'}} with</p>
+            <div>
+                <button id="google" type="button" mat-mini-fab color="light" aria-label="Google Sign In">
+                    <mat-icon><img src="assets/Google_Logo.svg"></mat-icon>
+                </button>
+                <button id="fb" type="button" mat-mini-fab color="light" aria-label="Facebook Sign In"
+                    (click)="fbSignIn()">
+                    <mat-icon><img src="assets/Facebook_Logo.svg"></mat-icon>
+                </button>
+                <button id="git" type="button" mat-mini-fab color="light" aria-label="GitHub Sign In"
+                    (click)="gitSignIn()">
+                    <mat-icon><img src="assets/GitHub_Logo.svg"></mat-icon>
+                </button>
+            </div>
         </div>
+    </form>
+</ng-container>
+<ng-container *ngIf="success">
+    <div class="flex-center">
+        <h1>Registration Successful</h1>
+        <mat-icon id="success">check_circle</mat-icon>
+        <button mat-raised-button type="submit" color="primary" (click)="isLogin=true;success=false">Sign In</button>
     </div>
-    <div id="social-container" *ngIf="!loading">
-        <p>Or Sign {{isLogin?'In':'Up'}} with</p>
-        <div>
-            <button id="google" type="button" mat-mini-fab color="light" aria-label="Google Sign In">
-                <mat-icon><img src="assets/Google_Logo.svg"></mat-icon>
-            </button>
-            <button id="fb" type="button" mat-mini-fab color="light" aria-label="Facebook Sign In" (click)="fbSignIn()">
-                <mat-icon><img src="assets/Facebook_Logo.svg"></mat-icon>
-            </button>
-            <button id="git" type="button" mat-mini-fab color="light" aria-label="GitHub Sign In" (click)="gitSignIn()">
-                <mat-icon><img src="assets/GitHub_Logo.svg"></mat-icon>
-            </button>
-        </div>
-    </div>
-</form>
+</ng-container>
