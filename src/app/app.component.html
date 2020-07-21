@@ -4,7 +4,7 @@
   </button>
   <a id="logo" routerLink="dashboard">
     <img class="mx-3" width="40" alt="Shop Logo" src="../assets/shop_icon.png">
-    <span>Supply Chain Example</span>
+    <span>Supply Chain Demo App</span>
   </a>
   <form id="search-container" [class]="auto.isOpen?'opened':''">
     <input type="text" placeholder="Search..." aria-label="Search" [formControl]="myControl" [matAutocomplete]="auto">
@@ -41,8 +41,6 @@
     [fixedTopGap]="isMobile?56:64">
     <mat-nav-list>
       <a *ngFor="let p of pages" mat-list-item [routerLink]="p" routerLinkActive="active-link">{{p}} </a>
-      <!-- <a mat-list-item routerLink="invoices" routerLinkActive="active-link">Invoices </a> -->
-      <!-- <a mat-list-item routerLink="shipment" routerLinkActive="active-link">Shipment </a> -->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
