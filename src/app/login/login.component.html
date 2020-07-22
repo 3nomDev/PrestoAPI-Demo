@@ -39,7 +39,8 @@
         <div id="social-container" *ngIf="!loading">
             <p>Or Sign {{isLogin?'In':'Up'}} with</p>
             <div>
-                <button id="google" type="button" mat-mini-fab color="light" aria-label="Google Sign In">
+                <button #google type="button" mat-mini-fab color="light" aria-label="Google Sign In"
+                    (click)="googleSignIn(google)">
                     <mat-icon><img src="assets/Google_Logo.svg"></mat-icon>
                 </button>
                 <button id="fb" type="button" mat-mini-fab color="light" aria-label="Facebook Sign In"

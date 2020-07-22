@@ -223,13 +223,16 @@ export class PrestoService {
       .get<User>(this.projectBase + 'account/' + this.uid, this.getToken())
       .toPromise()
       .catch(this.handleError);
-    user = this.formatPhoto(user);
-    this.user.next(user);
+    if (Object.keys(user).length === 0) this.user.next(null);
+    else {
+      user = this.formatPhoto(user);
+      this.user.next(user);
+    }
   }
   formatPhoto(user: User) {
     if (user && user.metadata) {
       const meta = JSON.parse(user.metadata);
-      if (meta && meta.photo) user.photo = meta.photo;
+      if (meta && meta.avatar) user.photo = meta.avatar;
     }
     return user;
   }
