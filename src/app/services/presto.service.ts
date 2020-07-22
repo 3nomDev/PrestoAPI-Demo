@@ -236,15 +236,6 @@ export class PrestoService {
   get getCurrentUser() {
     return this.user.value;
   }
-  async getGitHubUser(body) {
-    const tokenUrl = 'https://github.com/login/oauth/access_token';
-    const userUrl = 'https://api.github.com/user';
-    return this.http
-      .post<{ access_token: string }>(tokenUrl, body, {
-        headers: { Accept: 'application/json' },
-      })
-      .toPromise();
-  }
   getToken() {
     const token = sessionStorage.getItem('token');
     return {

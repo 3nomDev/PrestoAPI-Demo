@@ -11,11 +11,9 @@ import { LoginComponent } from './login/login.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { UsersComponent } from './users/users.component';
 import { OrdersComponent } from './orders/orders.component';
-import { ShipmentComponent } from './shipment/shipment.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { CustomersComponent } from './customers/customers.component';
-import { SetttingsComponent } from './setttings/setttings.component';
-import { InvoicesComponent } from './invoices/invoices.component';
+import { SettingsComponent } from './settings/settings.component';
 
 // Material Modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -47,11 +45,9 @@ import { MatCardModule } from '@angular/material/card';
     InventoryComponent,
     UsersComponent,
     OrdersComponent,
-    ShipmentComponent,
     SuppliersComponent,
     CustomersComponent,
-    SetttingsComponent,
-    InvoicesComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,7 +6,6 @@ export class User {
   lastLogin?: string;
   token?: string;
   password?: string;
-  provider?: string;
   expMinutes?: number;
   photo?: string;
   metadata?: any;

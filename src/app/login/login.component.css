@@ -26,9 +26,10 @@ mat-form-field {
   align-items: baseline;
 }
 #social-container p {
+  font-size: 15px;
   font-weight: 500;
 }
-#social-container button:nth-of-type(2) {
+#social-container button {
   margin: 0 1rem;
 }
 #success {

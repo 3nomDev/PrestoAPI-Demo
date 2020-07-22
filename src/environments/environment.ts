@@ -7,8 +7,6 @@ export const environment = {
   googleClientId:
     '526157046335-5bmpq7r92g4cirfc5vq7rapp27lupej3.apps.googleusercontent.com',
   fbAppId: '2412174265691357',
-  gitHubClientId: 'e472ee217aca7dc3ce9e',
-  gitHubSecret: 'bdefaca0aeda46a2282d3de50dfcc78ea09c999b',
 };
 
 /*

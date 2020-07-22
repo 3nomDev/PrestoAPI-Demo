@@ -7,7 +7,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ShipmentComponent } from './shipment/shipment.component';
 import { CustomersComponent } from './customers/customers.component';
-import { SetttingsComponent } from './setttings/setttings.component';
+import { SettingsComponent } from './Settings/Settings.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    component: SetttingsComponent,
+    component: SettingsComponent,
   },
   {
     path: 'orders',

@@ -4,8 +4,6 @@ import { PrestoService } from '../services/presto.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 declare var gapi;
 declare var FB;
 
@@ -19,25 +17,15 @@ export class LoginComponent {
   hide = true;
   loading = false;
   success = false;
-  isLogin = false;
   errorMsg = '';
   gitCode: string;
 
   constructor(
     private ps: PrestoService,
-    private location: Location,
     public dialogRef: MatDialogRef<LoginComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { isLogin: boolean; gitCode: string }
-  ) {
-    this.isLogin = data.isLogin;
-    if (data.gitCode) this.getGitHubToken(data.gitCode);
-  }
+    @Inject(MAT_DIALOG_DATA) public isLogin: boolean
+  ) {}
 
-  onSubmit() {
-    this.loading = true;
-    if (this.isLogin) this.login();
-    else this.register();
-  }
   register() {
     return this.ps
       .register(this.model)
@@ -50,6 +38,7 @@ export class LoginComponent {
       })
       .finally(() => (this.loading = false));
   }
+
   login() {
     this.ps
       .login(this.model)
@@ -63,39 +52,12 @@ export class LoginComponent {
       .finally(() => (this.loading = false));
   }
 
-  ngAfterViewInit() {
-    this.googleInit();
-    this.fbInit();
-  }
-  // https://docs.github.com/en/developers/apps/authorizing-oauth-apps
-  //https://demo-app.prestoapi.com
-  gitSignIn() {
-    console.log('window.location.href: ', window.location.href);
-    let url = 'https://github.com/login/oauth/authorize';
-    url += '?client_id=' + environment.gitHubClientId;
-    url += '&redirect_uri=' + encodeURI(window.location.href);
-    window.location.href = url;
-  }
-  async getGitHubToken(code: string) {
+  onSubmit() {
     this.loading = true;
-    this.location.replaceState(this.location.path().split('?')[0], '');
-    const body = {
-      client_id: environment.gitHubClientId,
-      client_secret: environment.gitHubSecret,
-      code: code,
-      redirect_uri: encodeURI(window.location.href),
-    };
-    this.ps
-      .getGitHubUser(body)
-      .then((res) => {
-        console.log('res: ', res);
-        this.model.token = res.access_token;
-        this.model.provider = 'github';
-        this.onSubmit();
-      })
-      .catch((err) => console.error(err))
-      .finally(() => (this.loading = false));
+    if (this.isLogin) this.login();
+    else this.register();
   }
+
   fbInit() {
     FB.init({
       appId: environment.fbAppId,
@@ -110,11 +72,10 @@ export class LoginComponent {
       (response) => {
         if (response.authResponse) {
           this.model.token = response.authResponse.accessToken;
-          this.model.provider = 'facebook';
           this.onSubmit();
         } else console.log('User cancelled login or did not fully authorize.');
       },
-      { scope: 'email' }
+      { scope: 'email' } //Email scope is necessary for PrestoAPI Auth
     );
   }
 
@@ -135,11 +96,7 @@ export class LoginComponent {
         element,
         () => {},
         (res) => {
-          this.model.name = res.getBasicProfile().getName();
-          this.model.email = res.getBasicProfile().getEmail();
-          this.model.metadata = { photo: res.getBasicProfile().getImageUrl() };
           this.model.token = res.getAuthResponse().id_token;
-          this.model.provider = 'google';
           this.onSubmit();
         },
         (error) => {
