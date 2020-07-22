@@ -13,7 +13,6 @@ import { UsersComponent } from './users/users.component';
 import { OrdersComponent } from './orders/orders.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 import { CustomersComponent } from './customers/customers.component';
-import { SettingsComponent } from './settings/settings.component';
 
 // Material Modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -47,7 +46,6 @@ import { MatCardModule } from '@angular/material/card';
     OrdersComponent,
     SuppliersComponent,
     CustomersComponent,
-    SettingsComponent,
   ],
   imports: [
     BrowserModule,

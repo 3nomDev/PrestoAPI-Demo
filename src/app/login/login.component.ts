@@ -26,6 +26,11 @@ export class LoginComponent {
     @Inject(MAT_DIALOG_DATA) public isLogin: boolean
   ) {}
 
+  ngAfterViewInit() {
+    this.googleInit();
+    this.fbInit();
+  }
+
   register() {
     return this.ps
       .register(this.model)

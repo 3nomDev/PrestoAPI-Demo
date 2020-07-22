@@ -7,7 +7,6 @@ import { OrdersComponent } from './orders/orders.component';
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ShipmentComponent } from './shipment/shipment.component';
 import { CustomersComponent } from './customers/customers.component';
-import { SettingsComponent } from './Settings/Settings.component';
 import { SuppliersComponent } from './suppliers/suppliers.component';
 
 const routes: Routes = [
@@ -22,10 +21,6 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-  },
-  {
-    path: 'settings',
-    component: SettingsComponent,
   },
   {
     path: 'orders',
