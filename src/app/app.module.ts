@@ -72,6 +72,11 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
   ],
   providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: InterceptorService,
+    //   multi: true,
+    // },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: { width: '500px', hasBackdrop: true },
